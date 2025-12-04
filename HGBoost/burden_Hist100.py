@@ -8,7 +8,7 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import make_scorer, r2_score
+from sklearn.metrics import make_scorer, r2_score, mean_squared_error
 
 data = pd.read_csv("Preprocess/sanmateo_burden_data.csv")
 inputs = data.drop(columns=["bldg_id", 'out.energy_burden_savings..percentage'])
@@ -100,7 +100,8 @@ print("optimal params for burden_hist:", cv_search_random.best_params_)
 
 preds = use_pipeline.predict(input_test)
 r2 = r2_score(output_test, preds)
-print("R^2 score for burden:", r2)
+RMSE = np.sqrt(mean_squared_error(output_test, preds))
+print("R^2 score:", r2, " RMSE ", RMSE)
 
 # get top 100
 top100 = pd.DataFrame({
@@ -126,6 +127,6 @@ print("Precision for 100: ", number_right/100)
 with open("HGBoost/HGBoost_burden_results100.txt", "w") as f:
     f.write(f"Hist. Grad. Boosting Reg. for Burden Red.\n")
     f.write(f"Opt. params: {cv_search_random.best_params_} \n")
-    f.write(f"R^2: {r2} \n")
+    f.write(f"R^2: {r2} RMSE: {RMSE} \n")
     f.write(f"Top ids: {top_ids} \n")
     f.write(f"Got {number_right} out of 100, prec. {number_right/100} \n")

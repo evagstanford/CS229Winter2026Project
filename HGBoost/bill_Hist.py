@@ -8,7 +8,7 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import make_scorer, r2_score
+from sklearn.metrics import make_scorer, r2_score, mean_squared_error
 
 data = pd.read_csv("Preprocess/sanmateo_bill_data.csv")
 inputs = data.drop(columns=["bldg_id", 'out.utility_bills.total_bill_savings..usd'])
@@ -100,7 +100,8 @@ print("optimal params for bill_hist:", cv_search_random.best_params_)
 
 preds = use_pipeline.predict(input_test)
 r2 = r2_score(output_test, preds)
-print("R^2 score for bill:", r2)
+RMSE = np.sqrt(mean_squared_error(output_test, preds))
+print("R^2 score:", r2, " RMSE ", RMSE)
 
 # get top 200
 top200 = pd.DataFrame({
@@ -126,6 +127,6 @@ print("Precision for 200: ", number_right/200)
 with open("HGBoost/HGBoost_bill_results.txt", "w") as f:
     f.write(f"Hist. Grad. Boosting Reg. for Bill Savings\n")
     f.write(f"Opt. params: {cv_search_random.best_params_} \n")
-    f.write(f"R^2: {r2} \n")
+    f.write(f"R^2: {r2} RMSE: {RMSE}\n")
     f.write(f"Top ids: {top_ids} \n")
     f.write(f"Got {number_right} out of 200, prec. {number_right/200} \n")
