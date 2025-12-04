@@ -1,0 +1,69 @@
+# Pipeline for Preprocessing data
+
+import pandas as pd 
+import numpy as np
+import os
+import re
+import json
+from sklearn.preprocessing import StandardScaler
+
+input_csv = "Preprocess/SanMateo_needed_data.csv"
+output_path = "Preprocess/Processed/"
+map_path = "Preprocess/category_maps.json"
+
+bldg_ids_to_Drop = {
+    # outliers
+    536576, 141113, 150396, 366539, 522048, 124296, 335080, 408686, 202027, 332073, 443912,
+    # missing
+    332865, 487855, 520761, 453147, 81584, 502631, 398146, 377660, 311339, 53348,
+    322712, 226189, 1254, 429863, 260470, 145808, 137606, 449291, 175128, 311624,
+    514735, 337514, 132176, 364901, 337571, 184866, 319739, 351614, 360609, 7528,
+    522110, 25393, 64978, 488102, 525104, 227159, 531637, 424891, 549388, 40597,
+    374144, 89302, 12823, 277881, 349678, 317802, 455989, 517798, 15610, 265653,
+    395579, 219326, 492888, 297057, 474156, 164631, 267137, 344609,
+}
+
+def clean_col(col_data):
+    # returns a numeric Series
+    # string without spaces
+    # any nan _> pd.NA
+    result = np.nan(type="float64")
+    stripped = col_data.astype(str).str.strip().str.lower()
+    numeric = pd.to_numeric(stripped, errors="ignore")
+
+    # FIX!!! 
+    col_data = col_data.replace({"nan": pd.NA, "na": pd.NA, "n/a": pd.NA, "unknown": pd.NA, "none": pd.NA})
+    result = col_data
+    return result.astype("float64", errors="ignore")
+
+def clean_features(data):
+    cleaned = {}
+    for col in data.columns:
+        if col == "bldg_id":
+            cleaned["bldg_id"] = data["bldg_id"]
+        num_series = clean_col(data[col])
+
+
+
+
+
+
+
+
+
+def main():
+    # configurate and then process
+    print("Preprocessing Data...")
+    data = pd.read_csv(input_csv).reset_index(drop=True)
+    data = data[~data["bldg_id"].isin(bldg_ids_to_Drop)]
+    print("Dropped IDs")
+    clean_features(data) # convert all to numeric 
+    print("Cleaned Features")
+    normalize_features() #z score all features except bldg_id
+    print("Normalized Features")
+    save_maps() # save mapping dicts for categorical features
+
+
+
+if __name__ == "__main__":
+    main()

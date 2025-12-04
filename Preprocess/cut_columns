@@ -1,0 +1,50 @@
+# Takes San Mateo dataset and further restricts to just one output value (emissions, electricity, burden, bill)
+
+import pandas as pd
+
+df = pd.read_csv("Preprocess/san_mateo_needed_cols.csv")
+
+keep = [
+"bldg_id",
+"in.representative_income",
+"in.sqft..ft2",
+"in.area_median_income",
+"in.bedrooms",
+"in.cec_climate_zone",
+"in.city",
+"in.clothes_washer",
+"in.clothes_washer_presence",
+"in.clothes_washer_usage_level",
+"in.dishwasher_usage_level",
+"in.door_area",
+"in.federal_poverty_level",
+"in.geometry_building_type_acs",
+"in.geometry_building_type_height",
+"in.geometry_building_type_recs",
+"in.geometry_floor_area",
+"in.geometry_floor_area_bin",
+"in.geometry_stories",
+"in.geometry_stories_low_rise",
+"in.heating_fuel",
+"in.hot_water_distribution",
+"in.hot_water_fixtures",
+"in.income",
+"in.income_recs_2020",
+"in.vacancy_status",
+"in.usage_level",
+"in.water_heater_efficiency",
+"in.water_heater_fuel",
+"in.water_heater_in_unit",
+"in.water_heater_location",
+"in.utility_bill_electricity_marginal_rates",
+"in.utility_bill_fuel_oil_marginal_rates",
+"in.utility_bill_natural_gas_fixed_charges",
+"in.utility_bill_natural_gas_marginal_rates",
+"out.electricity.net.energy_savings..kwh",
+'out.utility_bills.total_bill_savings..usd',
+'out.energy_burden_savings..percentage',
+'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'
+]
+df = df[keep]
+
+df.to_csv("Preprocess/SanMateo_needed_data", index=False)
