@@ -1,10 +1,8 @@
-# This file produces the top 200 buildings for predicted bill savings using OLS
+# This file produces the top 200 buildings for predicted bill savings using Ridge
 import pandas as pd
 import numpy as np
 from sklearn.pipeline import Pipeline
-from scipy.stats import randint
-from scipy.stats import loguniform
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import r2_score, mean_squared_error
@@ -21,10 +19,9 @@ input_train, input_test, output_train, output_test, bldgid_train_all, bldgid_tes
     random_state=42
 )
 
-# write out pipeline
 pipeline = Pipeline(steps=[
     ('imputation', SimpleImputer(strategy='mean')),
-    ('chosen_model', LinearRegression()
+    ('chosen_model', Ridge(alpha=1.0)
     )])
 
 pipeline.fit(input_train, output_train)
@@ -40,8 +37,8 @@ top200 = pd.DataFrame({
     "bldg_id": bldgid_test.values,
     "bill_red_pred": preds
 }).sort_values("bill_red_pred", ascending=False).head(200)
-top200.to_csv("OLS/200_test_bill.csv", index=False)
-print("See OLS/200_test_bill.csv for top 200")
+top200.to_csv("L2/200_test_bill.csv", index=False)
+print("See L2/200_test_bill.csv for top 200")
 
 # compare top from the testing set to the actual top for this category, in testing set
 top_ids = top200["bldg_id"].to_list()
@@ -56,9 +53,8 @@ number_right = len(shared)
 print("There are this many top 200 shared: ", number_right)
 print("Precision for 200: ", number_right/200)
 
-with open("OLS/OLS_bill_results.txt", "w") as f:
-    f.write(f"OLS for Bill Savings\n")
-    f.write(f"R^2: {r2} RMSE: {RMSE} \n")
+with open("L2/L2_bill_results.txt", "w") as f:
+    f.write(f"Ridge for Bill Savings\n")
+    f.write(f"R^2: {r2} RMSE: {RMSE}\n")
     f.write(f"Top ids: {top_ids} \n")
     f.write(f"Got {number_right} out of 200, prec. {number_right/200} \n")
-    

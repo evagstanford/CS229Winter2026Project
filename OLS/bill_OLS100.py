@@ -57,7 +57,7 @@ print("Precision for 100: ", number_right/100)
 
 with open("OLS/OLS_bill_results100.txt", "w") as f:
     f.write(f"OLS for Bill Savings\n")
-    f.write(f"R^2: {r2} \n")
+    f.write(f"R^2: {r2} RMSE: {RMSE} \n")
     f.write(f"Top ids: {top_ids} \n")
     f.write(f"Got {number_right} out of 100, prec. {number_right/100} \n")
-    f.write(f"RMSE: {RMSE} \n")
+    

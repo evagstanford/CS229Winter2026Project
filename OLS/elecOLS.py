@@ -57,7 +57,7 @@ print("Precision for 200: ", number_right/200)
 
 with open("OLS/OLS_elec_results.txt", "w") as f:
     f.write(f"OLS for Electricity Energy Reduction\n")
-    f.write(f"R^2: {r2} \n")
+    f.write(f"R^2: {r2} RMSE: {RMSE} \n")
     f.write(f"Top ids: {top_ids} \n")
     f.write(f"Got {number_right} out of 200, prec. {number_right/200} \n")
-    f.write(f"RMSE: {RMSE} \n")
+    
