@@ -7,21 +7,31 @@ import re
 import json
 from sklearn.preprocessing import StandardScaler
 
-input_csv = "Preprocess/SanMateo_needed_data.csv"
+input_csv = "Preprocess/san_mateo_county_clean.csv"
 output_path = "Preprocess/Processed/"
 map_path = "Preprocess/category_maps.json"
 
 bldg_ids_to_Drop = {
     # outliers
-    536576, 141113, 150396, 366539, 522048, 124296, 335080, 408686, 202027, 332073, 443912,
-    # missing
-    332865, 487855, 520761, 453147, 81584, 502631, 398146, 377660, 311339, 53348,
-    322712, 226189, 1254, 429863, 260470, 145808, 137606, 449291, 175128, 311624,
-    514735, 337514, 132176, 364901, 337571, 184866, 319739, 351614, 360609, 7528,
-    522110, 25393, 64978, 488102, 525104, 227159, 531637, 424891, 549388, 40597,
-    374144, 89302, 12823, 277881, 349678, 317802, 455989, 517798, 15610, 265653,
-    395579, 219326, 492888, 297057, 474156, 164631, 267137, 344609,
+    536576, 141113, 150396, 366539, 522048, 124296, 335080, 408686, 202027, 332073, 443912
 }
+
+cols_to_keep = {
+    'bldg_id', 
+    'in.representative_income', 
+    'in.sqft..ft2', 'in.bedrooms', 
+    'in.city', 'in.clothes_washer', 'in.clothes_washer_presence', 
+    'in.clothes_washer_usage_level', 'in.dishwasher_usage_level', 'in.geometry_building_type_acs', 
+    'in.geometry_building_type_height', 'in.geometry_building_type_recs', 'in.geometry_floor_area', 
+    'in.geometry_floor_area_bin', 'in.geometry_stories', 'in.geometry_stories_low_rise', 
+    'in.heating_fuel', 'in.hot_water_fixtures', 'in.usage_level', 'in.water_heater_efficiency', 
+    'in.water_heater_fuel', 'in.water_heater_in_unit', 'in.water_heater_location', 
+    'out.electricity.net.energy_savings..kwh', 'out.utility_bills.total_bill_savings..usd', 
+    'out.energy_burden_savings..percentage', 'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'
+}
+
+data = pd.read_csv(input_csv)
+data = data[list(cols_to_keep)].reset_index(drop=True)
 
 def clean_col(col_data):
     # returns a numeric Series
