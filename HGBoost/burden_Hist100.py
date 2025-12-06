@@ -99,9 +99,13 @@ print("optimal params for burden_hist:", cv_search_random.best_params_)
 
 
 preds = use_pipeline.predict(input_test)
-r2 = r2_score(output_test, preds)
-RMSE = np.sqrt(mean_squared_error(output_test, preds))
-print("R^2 score:", r2, " RMSE ", RMSE)
+preds_training = use_pipeline.predict(input_train_all)
+r2_test = r2_score(output_test, preds)
+RMSE_test = np.sqrt(mean_squared_error(output_test, preds))
+print("R^2 score test:", r2_test, " RMSE test", RMSE_test)
+r2_train = r2_score(output_train_all, preds_training)
+RMSE_train = np.sqrt(mean_squared_error(output_train_all, preds_training))
+print("R^2 score train:", r2_train, " RMSE train", RMSE_train)
 
 # get top 100
 top100 = pd.DataFrame({
@@ -127,6 +131,7 @@ print("Precision for 100: ", number_right/100)
 with open("HGBoost/HGBoost_burden_results100.txt", "w") as f:
     f.write(f"Hist. Grad. Boosting Reg. for Burden Red.\n")
     f.write(f"Opt. params: {cv_search_random.best_params_} \n")
-    f.write(f"R^2: {r2} RMSE: {RMSE} \n")
+    f.write(f"R^2 test: {r2_test} RMSE test: {RMSE_test}\n")
+    f.write(f"R2 for training data: {r2_train} RMSE for train: {RMSE_train} \n")
     f.write(f"Top ids: {top_ids} \n")
     f.write(f"Got {number_right} out of 100, prec. {number_right/100} \n")
