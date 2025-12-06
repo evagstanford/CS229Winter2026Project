@@ -90,6 +90,12 @@ for col in cleaned.columns:
     cleaned[col] = cleaned[col].astype("float64", errors="ignore") 
     cleaned[col] = pd.to_numeric(cleaned[col], errors="coerce")
 
+fraction_nans = cleaned.isna().mean()
+for col in cleaned.columns:
+    if fraction_nans[col] > 0.5:
+        cleaned = cleaned.drop(columns=[col])
+
+
 # NORMALIZE NUMERIC COLUMNS with standard scalar
 for column in cleaned.columns:
     if column.lower() == "bldg_id" or column.lower() == "in.representative_income":
@@ -102,16 +108,16 @@ for column in cleaned.columns:
     cleaned[column] = scaler.fit_transform(cleaned[[column]]).ravel()
     
 cleaned.to_csv(output_path + "sanmateo_preprocessed.csv", index=False)
-burden_data = cleaned.drop(columns = ['out.electricity.net.energy_savings..kwh',
+burden_data = cleaned.dropna(subset=['out.energy_burden_savings..percentage']).drop(columns = ['out.electricity.net.energy_savings..kwh',
     'out.utility_bills.total_bill_savings..usd',
     'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'])
-energy_data = cleaned.drop(columns=['out.energy_burden_savings..percentage',
+energy_data = cleaned.dropna(subset=['out.electricity.net.energy_savings..kwh']).drop(columns=['out.energy_burden_savings..percentage',
     'out.utility_bills.total_bill_savings..usd',
     'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'])
-bill_data = cleaned.drop(columns = ['out.electricity.net.energy_savings..kwh',
+bill_data = cleaned.dropna(subset=['out.utility_bills.total_bill_savings..usd']).drop(columns = ['out.electricity.net.energy_savings..kwh',
     'out.energy_burden_savings..percentage',
     'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'])
-emiss_data = cleaned.drop(columns=['out.electricity.net.energy_savings..kwh',
+emiss_data = cleaned.dropna(subset=['out.emissions_reduction.total.aer_mid_case_avg..co2e_kg']).drop(columns=['out.electricity.net.energy_savings..kwh',
     'out.utility_bills.total_bill_savings..usd',
     'out.energy_burden_savings..percentage'])
 burden_data.to_csv("Preprocess/sanmateo_burden_data.csv", index=False)

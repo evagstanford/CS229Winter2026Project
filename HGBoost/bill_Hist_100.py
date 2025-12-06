@@ -8,7 +8,7 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import make_scorer, r2_score, mean_squared_error
+from sklearn.metrics import make_scorer, r2_score, mean_squared_error, mean_absolute_error
 
 data = pd.read_csv("Preprocess/sanmateo_bill_data.csv")
 inputs = data.drop(columns=["bldg_id", 'out.utility_bills.total_bill_savings..usd'])
@@ -32,7 +32,7 @@ input_train, input_valid, output_train, output_valid, bldgid_train, bldgid_valid
 
 # write out pipeline
 HGB_pipeline = Pipeline(steps=[
-    ('imputation', SimpleImputer(strategy='mean')),
+    ('imputation', SimpleImputer(strategy='median')),
     ('chosen_model', HistGradientBoostingRegressor(
         random_state=42
     ))])
@@ -102,6 +102,10 @@ preds = use_pipeline.predict(input_test)
 preds_training = use_pipeline.predict(input_train_all)
 r2_test = r2_score(output_test, preds)
 RMSE_test = np.sqrt(mean_squared_error(output_test, preds))
+mae_test = mean_absolute_error(output_test, preds)
+mape_test = np.mean(np.abs((output_test - preds) / output_test)) * 100
+mae_train = mean_absolute_error(output_train_all, preds_training)
+mape_train = np.mean(np.abs((output_train_all - preds_training) / output_train_all)) * 100
 print("R^2 score test:", r2_test, " RMSE test", RMSE_test)
 r2_train = r2_score(output_train_all, preds_training)
 RMSE_train = np.sqrt(mean_squared_error(output_train_all, preds_training))
@@ -133,6 +137,8 @@ with open("HGBoost/HGBoost_bill_results100.txt", "w") as f:
     f.write(f"Hist. Grad. Boosting Reg. for Bill Savings\n")
     f.write(f"Opt. params: {cv_search_random.best_params_} \n")
     f.write(f"R^2 test: {r2_test} RMSE test: {RMSE_test}\n")
+    f.write(f"MAPE train: {mape_train} MAPE test: {mape_test}\n")
+    f.write(f"mae train: {mae_train} mae test: {mae_test}\n")
     f.write(f"R2 for training data: {r2_train} RMSE for train: {RMSE_train} \n")
     f.write(f"Top ids: {top_ids} \n")
     f.write(f"Got {number_right} out of 100, prec. {number_right/100} \n")

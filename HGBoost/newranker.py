@@ -7,7 +7,8 @@ energy_top200 = pd.read_csv("HGBoost/200_test_elec.csv")
 orig_data = pd.read_csv("Preprocess/san_mateo_needed_cols.csv")[['bldg_id', 'in.representative_income']]
 
 # select the weights
-weights = [0.25, 0.25, 0.25, 0.25]
+weights = [0.0, 0.2, 0.8, 0.0]
+weightstr = "0, 0.2, 0.8, 0"
 # Order is Emissions, Bill, Burden, Energy
 
 # merge preds by building ID
@@ -85,7 +86,5 @@ merged = merged[[
 ]]
 
 #Save to output csv 
-merged.to_csv("HGBoost/newrankingwithincome.csv", index=False)
-shared = set(merged['bldg_id']).intersection(set(pd.read_csv("HGBoost/0.25_0.25_0.25_0.25_top200_HGBoost.csv")['bldg_id']))
-print(f"shared {shared} which is {len(shared)} buildings/200")
-print("Successfully ranked the top 200 from each model")
+merged.to_csv("HGBoost/" + weightstr + "_newrankingwithincome.csv", index=False)
+
