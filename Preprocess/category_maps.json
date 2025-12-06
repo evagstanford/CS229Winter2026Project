@@ -1,0 +1,59 @@
+{
+    "in.city": {
+        "ca, daly city": 0,
+        "ca, redwood city": 1,
+        "ca, san bruno": 2,
+        "ca, san mateo": 3,
+        "ca, south san francisco": 4,
+        "in another census place": 5,
+        "not in a census place": 6
+    },
+    "in.clothes_washer": {
+        "<NA>": 0,
+        "energystar": 1,
+        "standard": 2
+    },
+    "in.geometry_stories_low_rise": {
+        "1": 0,
+        "2": 1,
+        "3": 2,
+        "4+": 3
+    },
+    "in.heating_fuel": {
+        "<NA>": 0,
+        "electricity": 1,
+        "natural gas": 2,
+        "other fuel": 3,
+        "propane": 4
+    },
+    "in.usage_level": {
+        "high": 0,
+        "low": 1,
+        "medium": 2
+    },
+    "in.water_heater_efficiency": {
+        "electric premium": 0,
+        "electric standard": 1,
+        "electric tankless": 2,
+        "natural gas premium": 3,
+        "natural gas standard": 4,
+        "natural gas tankless": 5,
+        "propane premium": 6,
+        "propane standard": 7,
+        "propane tankless": 8
+    },
+    "in.water_heater_fuel": {
+        "electricity": 0,
+        "natural gas": 1,
+        "propane": 2
+    },
+    "in.water_heater_location": {
+        "conditioned mechanical room": 0,
+        "crawlspace": 1,
+        "garage": 2,
+        "heated basement": 3,
+        "living space": 4,
+        "outside": 5,
+        "unheated basement": 6
+    }
+}
