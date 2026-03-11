@@ -2,13 +2,14 @@
 
 import pandas as pd
 
-df = pd.read_csv("Preprocess/san_mateo_needed_cols.csv")
+#df = pd.read_csv("Preprocess/san_mateo_needed_cols.csv")
+df = pd.read_csv("Preprocess/san_mateo_county.csv")
 
 keep = [
 "bldg_id",
 "in.representative_income",
 "in.sqft..ft2",
-"in.area_median_income",
+#"in.area_median_income",
 "in.bedrooms",
 "in.cec_climate_zone",
 "in.city",
@@ -17,7 +18,7 @@ keep = [
 "in.clothes_washer_usage_level",
 "in.dishwasher_usage_level",
 "in.door_area",
-"in.federal_poverty_level",
+#"in.federal_poverty_level",
 "in.geometry_building_type_acs",
 "in.geometry_building_type_height",
 "in.geometry_building_type_recs",
@@ -28,8 +29,8 @@ keep = [
 "in.heating_fuel",
 "in.hot_water_distribution",
 "in.hot_water_fixtures",
-"in.income",
-"in.income_recs_2020",
+#"in.income",
+#"in.income_recs_2020",
 "in.vacancy_status",
 "in.usage_level",
 "in.water_heater_efficiency",
@@ -45,6 +46,6 @@ keep = [
 'out.energy_burden_savings..percentage',
 'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'
 ]
-df = df[keep]
+df = df[keep].reset_index(drop=True)
 
-df.to_csv("Preprocess/SanMateo_needed_data", index=False)
+df.to_csv("Preprocess/san_mateo_cut_cols", index=False)

@@ -3,10 +3,10 @@ import json
 from sklearn.preprocessing import StandardScaler
 print("RUNNING:", __file__)
 
-
-input_csv = "Preprocess/san_mateo_county_clean.csv"
-output_path = "Preprocess/"
-map_path = "Preprocess/category_maps.json"
+# county clean -> needed_cols
+input_csv = "/Users/evageierstanger/CS229FinalProject/Preprocess/san_mateo_cut_cols.csv"
+output_path = "/Users/evageierstanger/CS229FinalProject/Preprocess"
+map_path = "/Users/evageierstanger/CS229FinalProject/Preprocess/category_maps.json"
 scaler = StandardScaler()
 
 bldg_ids_to_Drop = {
@@ -14,29 +14,15 @@ bldg_ids_to_Drop = {
     536576, 141113, 150396, 366539, 522048, 124296, 335080, 408686, 202027, 332073, 443912
 }
 
-cols_to_keep = [
-    'bldg_id', 
-    'in.representative_income', 
-    'in.sqft..ft2', 'in.bedrooms', 
-    'in.city', 'in.clothes_washer', 'in.clothes_washer_presence', 
-    'in.clothes_washer_usage_level', 'in.dishwasher_usage_level', 'in.geometry_building_type_acs', 
-    'in.geometry_building_type_height', 'in.geometry_building_type_recs', 'in.geometry_floor_area', 
-    'in.geometry_floor_area_bin', 'in.geometry_stories', 'in.geometry_stories_low_rise', 
-    'in.heating_fuel', 'in.hot_water_fixtures', 'in.usage_level', 'in.water_heater_efficiency', 
-    'in.water_heater_fuel', 'in.water_heater_in_unit', 'in.water_heater_location', 
-    'out.electricity.net.energy_savings..kwh', 'out.utility_bills.total_bill_savings..usd', 
-    'out.energy_burden_savings..percentage', 'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'
-]
+
 
 target_cols = {
     'out.electricity.net.energy_savings..kwh',
     'out.utility_bills.total_bill_savings..usd',
-    'out.energy_burden_savings..percentage',
     'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'}
 
 data = pd.read_csv(input_csv, low_memory=False)
-# remove columns that we don't need
-data = data[list(cols_to_keep)].reset_index(drop=True)
+
 # remove outlier bldg ids
 data = data[~data['bldg_id'].isin(list(bldg_ids_to_Drop))]
 
@@ -108,9 +94,6 @@ for column in cleaned.columns:
     cleaned[column] = scaler.fit_transform(cleaned[[column]]).ravel()
     
 cleaned.to_csv(output_path + "sanmateo_preprocessed.csv", index=False)
-burden_data = cleaned.dropna(subset=['out.energy_burden_savings..percentage']).drop(columns = ['out.electricity.net.energy_savings..kwh',
-    'out.utility_bills.total_bill_savings..usd',
-    'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'])
 energy_data = cleaned.dropna(subset=['out.electricity.net.energy_savings..kwh']).drop(columns=['out.energy_burden_savings..percentage',
     'out.utility_bills.total_bill_savings..usd',
     'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'])
@@ -120,10 +103,9 @@ bill_data = cleaned.dropna(subset=['out.utility_bills.total_bill_savings..usd'])
 emiss_data = cleaned.dropna(subset=['out.emissions_reduction.total.aer_mid_case_avg..co2e_kg']).drop(columns=['out.electricity.net.energy_savings..kwh',
     'out.utility_bills.total_bill_savings..usd',
     'out.energy_burden_savings..percentage'])
-burden_data.to_csv("Preprocess/sanmateo_burden_data.csv", index=False)
-energy_data.to_csv("Preprocess/sanmateo_energy_data.csv", index=False)
-bill_data.to_csv("Preprocess/sanmateo_bill_data.csv", index=False)
-emiss_data.to_csv("Preprocess/sanmateo_emis_data.csv", index=False)
+energy_data.to_csv("/Users/evageierstanger/CS229FinalProject/Preprocess/sanmateo_energy_data.csv", index=False)
+bill_data.to_csv("/Users/evageierstanger/CS229FinalProject/Preprocess/sanmateo_bill_data.csv", index=False)
+emiss_data.to_csv("/Users/evageierstanger/CS229FinalProject/Preprocess/sanmateo_emis_data.csv", index=False)
 
 with open(map_path, "w") as f:
     json.dump(allmaps, f, indent=4)

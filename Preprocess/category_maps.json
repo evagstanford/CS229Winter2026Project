@@ -26,6 +26,13 @@
         "other fuel": 3,
         "propane": 4
     },
+    "in.hot_water_distribution": {
+        "uninsulated": 0
+    },
+    "in.vacancy_status": {
+        "occupied": 0,
+        "vacant": 1
+    },
     "in.usage_level": {
         "high": 0,
         "low": 1,
