@@ -3,7 +3,7 @@ import json
 from sklearn.preprocessing import StandardScaler
 print("RUNNING:", __file__)
 
-# county clean -> needed_cols
+
 input_csv = "/Users/evageierstanger/CS229FinalProject/Preprocess/san_mateo_cut_cols.csv"
 output_path = "/Users/evageierstanger/CS229FinalProject/Preprocess"
 map_path = "/Users/evageierstanger/CS229FinalProject/Preprocess/category_maps.json"
@@ -15,10 +15,10 @@ bldg_ids_to_Drop = {
 }
 
 
-
 target_cols = {
     'out.electricity.net.energy_savings..kwh',
     'out.utility_bills.total_bill_savings..usd',
+    'out.energy_burden_savings..percentage',
     'out.emissions_reduction.total.aer_mid_case_avg..co2e_kg'}
 
 data = pd.read_csv(input_csv, low_memory=False)
@@ -83,6 +83,7 @@ for col in cleaned.columns:
 
 
 # NORMALIZE NUMERIC COLUMNS with standard scalar
+"""
 for column in cleaned.columns:
     if column.lower() == "bldg_id" or column.lower() == "in.representative_income":
         continue
@@ -92,6 +93,7 @@ for column in cleaned.columns:
     if set(column_values) <= {0,1}:
         continue
     cleaned[column] = scaler.fit_transform(cleaned[[column]]).ravel()
+"""
     
 cleaned.to_csv(output_path + "sanmateo_preprocessed.csv", index=False)
 energy_data = cleaned.dropna(subset=['out.electricity.net.energy_savings..kwh']).drop(columns=['out.energy_burden_savings..percentage',

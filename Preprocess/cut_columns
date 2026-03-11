@@ -3,7 +3,8 @@
 import pandas as pd
 
 #df = pd.read_csv("Preprocess/san_mateo_needed_cols.csv")
-df = pd.read_csv("Preprocess/san_mateo_county.csv")
+#df = pd.read_csv("Preprocess/san_mateo_county.csv")
+df = pd.read_csv("/Users/evageierstanger/SanMateo_NREL.csv")
 
 keep = [
 "bldg_id",
@@ -48,4 +49,5 @@ keep = [
 ]
 df = df[keep].reset_index(drop=True)
 
-df.to_csv("Preprocess/san_mateo_cut_cols", index=False)
+
+df.to_csv("/Users/evageierstanger/CS229FinalProject/Preprocess/san_mateo_cut_cols.csv", index=False)
