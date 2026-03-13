@@ -7,8 +7,8 @@ energy_top200 = pd.read_csv("HGBoost/200_test_elec.csv")
 orig_data = pd.read_csv("/Users/evageierstanger/CS229FinalProject/Preprocess/san_mateo_cut_cols.csv")[['bldg_id', 'in.representative_income']]
 
 # select the weights
-weights = [0.25, 0.25, 0.25, 0.25]
-weightstr = "equal"
+weights = [0.5, 0, 0.5, 0]
+weightstr = "emissions_energy"
 # Order is Emissions, Bill, Energy, Burden
 
 # merge preds by building ID
