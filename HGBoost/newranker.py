@@ -7,8 +7,8 @@ energy_top200 = pd.read_csv("HGBoost/200_test_elec.csv")
 orig_data = pd.read_csv("/Users/evageierstanger/CS229FinalProject/Preprocess/san_mateo_cut_cols.csv")[['bldg_id', 'in.representative_income']]
 
 # select the weights
-weights = [0.5, 0, 0.5, 0]
-weightstr = "emissions_energy"
+weights = [0.1, 0.2, 0.3, 0.4]
+weightstr = "0.1,0.2,0.3,0.4"
 # Order is Emissions, Bill, Energy, Burden
 
 # merge preds by building ID
@@ -16,8 +16,7 @@ merged = emission_top200.merge(bill_top200, on="bldg_id", how="inner")
 merged = merged.merge(energy_top200, on="bldg_id", how="inner")
 merged = merged.merge(orig_data, on="bldg_id", how="left") # adds in rep. income
 merged.rename(columns={'in.representative_income': 'norm_income'}, inplace=True)
-print("inner merge result:", len(merged))
-print(merged.isnull().sum())
+
 def min_max(val):
     if val.max() == val.min():
         return pd.Series(0, index=val.index)
